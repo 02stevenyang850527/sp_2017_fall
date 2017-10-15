@@ -8,4 +8,4 @@ Progress:
 [Done] Since Xavier initialization is important, how do we do random initialization? A: 18 bits linear feedback shift register
 How many multipliers should we use on the architechure? 
 How to calculate exponential which is part of the differential croos entropy?
-How many word length should be assigned to each parameter? 
+How many word length should be assigned to each parameter?
