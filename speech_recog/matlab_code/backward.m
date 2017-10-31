@@ -7,11 +7,11 @@ function [dWf, dWi, dWc, dWo, dWy, dbf, dbi, dbc, dbo, dby, dh_next, dc_next] ..
     
     dh = dh + dh_next;
     
-    dho = c .* dh;
+    dho = tanh(c) .* dh;
     dho = sigmoid_backward(dho, ho);
     
     dc = ho .* dh;
-    dc = tanh_backward(dc, c);
+    dc = tanh_backward(dc, tanh(c));
     dc = dc + dc_next;
     
     dhf = c_old .* dc;

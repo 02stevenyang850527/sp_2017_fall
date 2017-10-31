@@ -1,6 +1,6 @@
 function [c_dWf,c_dWi,c_dWc,c_dWo,c_dWy,c_dbf,c_dbi,c_dbc,c_dbo,c_dby,...
           loss,acc,state_h, state_c, record]...
-    = train_step(X_train,y_train,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c,acc)
+    = train_step(X_train,y_train,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c)
 
     % Function: train one input character of sentence each time
     
@@ -48,7 +48,7 @@ function [c_dWf,c_dWi,c_dWc,c_dWo,c_dWy,c_dbf,c_dbi,c_dbc,c_dbo,c_dby,...
         cache_c(:,:,k) = state_c;
         
     end
-    loss = loss / sentence_size;
+    
     
     % Backward part
     dh_next = zeros(1,H);
@@ -63,14 +63,10 @@ function [c_dWf,c_dWi,c_dWc,c_dWo,c_dWy,c_dbf,c_dbi,c_dbc,c_dbo,c_dby,...
     c_dbc = zeros(1,H);
     c_dbo = zeros(1,H);
     c_dby = zeros(1,output_dim);
-    
+   
+    acc = sum(record==y_train);
     for k=1:sentence_size
         ind = sentence_size - k + 1;
-        [~,pred] = max(y_pred(:,:,k));
-        
-        if (pred == y_train(k))
-            acc = acc + 1;
-        end
         
         [dWf,dWi,dWc,dWo,dWy,dbf,dbi,dbc,dbo,dby,dh_next,dc_next]= ...
         backward(y_pred(:,:,ind),y_train(ind),cache_X(:,:,ind),dh_next,dc_next,...
@@ -88,11 +84,11 @@ function [c_dWf,c_dWi,c_dWc,c_dWo,c_dWy,c_dbf,c_dbi,c_dbc,c_dbo,c_dby,...
         c_dbo = c_dbo + dbo;
         c_dbc = c_dbc + dbc;
         c_dby = c_dby + dby;
-        
+ 
     end
-    
+
     % clip the gradient value
-    clip_value = 5;
+    clip_value = 15;
     c_dWf = min(clip_value,c_dWf);
     c_dWf = max(-clip_value,c_dWf);
     c_dWi = min(clip_value,c_dWi);
@@ -113,5 +109,5 @@ function [c_dWf,c_dWi,c_dWc,c_dWo,c_dWy,c_dbf,c_dbi,c_dbc,c_dbo,c_dby,...
     c_dbc = max(-clip_value,c_dbc);
     c_dby = min(clip_value,c_dby);
     c_dby = max(-clip_value,c_dby);
-    
+         
 end

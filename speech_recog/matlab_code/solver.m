@@ -1,4 +1,4 @@
-function [output_loss,output_acc] = solver(X_train,Y_train,alpha,batch_size,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by)
+function [output_loss,output_acc,val_loss,val_acc] = solver(X_train,Y_train,X_valid,Y_valid,alpha,batch_size,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by)
     beta1 = 0.9;
     beta2 = 0.999;
     print_after = 1;
@@ -34,9 +34,26 @@ function [output_loss,output_acc] = solver(X_train,Y_train,alpha,batch_size,n_it
     R_bc = zeros(1,H);
     R_bo = zeros(1,H);
     R_by = zeros(1,output_dim);
-    
     for iter = 1:n_iter
+        if iter < 11
+            alpha = 1e-2;
+        else
+            alpha = 1e-3;
+        end
         t = iter;
+        if cnt >= num_batch
+            cnt = 0;
+        end
+        
+        if cnt == num_batch-1
+            X_mini = X_train(cnt*batch_size+1:end);
+            Y_mini = Y_train(cnt*batch_size+1:end);
+        else
+            X_mini = X_train(cnt*batch_size+1:(cnt+1)*batch_size);
+            Y_mini = Y_train(cnt*batch_size+1:(cnt+1)*batch_size);
+        end
+        
+        cnt = cnt + 1;
         
         c_dWf = zeros(D+H,H);
         c_dWi = zeros(D+H,H);
@@ -50,78 +67,54 @@ function [output_loss,output_acc] = solver(X_train,Y_train,alpha,batch_size,n_it
         c_dby = zeros(1,output_dim);
         c_loss = 0;
         total = 0;
-        acc = 0;
-        
-        if cnt >= num_batch
-            cnt = 0;
-        end
-        
-        if cnt == num_batch-1
-            for batch_cnt = 1: mod(m,batch_size)
-                X = X_train{cnt*batch_size + batch_cnt};
-                Y = Y_train{cnt*batch_size + batch_cnt};
-                state_h = zeros(1,H);
-                state_c = zeros(1,H);
-                total = total + size(X,1);
+        c_acc = 0;
+        for batch_cnt = 1:size(X_mini,2)
+            X = X_mini{batch_cnt};
+            Y = Y_mini{batch_cnt};
+            state_h = zeros(1,H);
+            state_c = zeros(1,H);
+            total = total + size(X,1);
    
-                [dWf,dWi,dWc,dWo,dWy,dbf,dbi,dbc,dbo,dby,loss,acc,~,~,record]...
-                = train_step(X,Y,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c,acc);
-                c_dWf = c_dWf + dWf;
-                c_dWi = c_dWi + dWi;
-                c_dWo = c_dWo + dWo;
-                c_dWc = c_dWc + dWc;
-                c_dWy = c_dWy + dWy;
-                c_dbf = c_dbf + dbf;
-                c_dbi = c_dbi + dbi;
-                c_dbo = c_dbo + dbo;
-                c_dbc = c_dbc + dbc;
-                c_dby = c_dby + dby;
-                c_loss = c_loss + loss;
-            end
-        else
-            for batch_cnt = 1:batch_size
-                X = X_train{cnt*batch_size + batch_cnt};
-                Y = Y_train{cnt*batch_size + batch_cnt};
-                state_h = zeros(1,H);
-                state_c = zeros(1,H);
-                total = total + size(X,1);
-   
-                [dWf,dWi,dWc,dWo,dWy,dbf,dbi,dbc,dbo,dby,loss,acc,~,~,record]...
-                = train_step(X,Y,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c,acc);
-                c_dWf = c_dWf + dWf;
-                c_dWi = c_dWi + dWi;
-                c_dWo = c_dWo + dWo;
-                c_dWc = c_dWc + dWc;
-                c_dWy = c_dWy + dWy;
-                c_dbf = c_dbf + dbf;
-                c_dbi = c_dbi + dbi;
-                c_dbo = c_dbo + dbo;
-                c_dbc = c_dbc + dbc;
-                c_dby = c_dby + dby;
-                c_loss = c_loss + loss;
-            end
+            [dWf,dWi,dWc,dWo,dWy,dbf,dbi,dbc,dbo,dby,loss,acc,~,~,record]...
+            = train_step(X,Y,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c);
+            c_dWf = c_dWf + dWf;
+            c_dWi = c_dWi + dWi;
+            c_dWo = c_dWo + dWo;
+            c_dWc = c_dWc + dWc;
+            c_dWy = c_dWy + dWy;
+            c_dbf = c_dbf + dbf;
+            c_dbi = c_dbi + dbi;
+            c_dbo = c_dbo + dbo;
+            c_dbc = c_dbc + dbc;
+            c_dby = c_dby + dby;
+            c_loss = c_loss + loss;
+            c_acc = c_acc + acc;
         end
-        
-        cnt = cnt + 1; % finish one batch
-        
-        
-        if (mod(iter,5)==0)
-            disp('==');
-            disp(record(56:66));
-            disp(Y(56:66));
-            disp('==');
-        end
-        
-        c_loss = c_loss*200/total;  % average loss of 200 frame-based sequence input
-        acc = acc / total;
+        c_loss = c_loss/total;  % average loss of 1 frame-based sequence input
+        c_acc = c_acc / total;
+
+       % if (acc > 0.5)
+       %      disp('==');
+       %      fprintf('Predict:\n');
+       %      fprintf('%d ',record);
+       %      fprintf('\n');
+       %      fprintf('Label:\n');
+       %      fprintf('%d ',Y)
+       %      fprintf('\n')
+       %      disp('==')
+       % end
+
+       %trust_acc = mean(record==Y);
+
         smooth_loss = 0.999 .* smooth_loss + 0.001 .* c_loss;
-        
         if mod(iter, print_after) == 0
+
             output_loss(iter/print_after) = c_loss;
-            output_acc(iter/print_after) = acc;
+            output_acc(iter/print_after) = c_acc;
+
             disp('======================================');
-            disp(strcat('Iter: ',num2str(iter),', loss: ',num2str(c_loss)));
-            disp(strcat('acc: ',num2str(acc)));
+            disp(strcat('Iter: ',num2str(iter)));
+            disp(strcat('train_loss: ',num2str(c_loss),', train_acc: ',num2str(c_acc)));
             disp('======================================');
             disp(' ');
         end
@@ -191,7 +184,11 @@ function [output_loss,output_acc] = solver(X_train,Y_train,alpha,batch_size,n_it
         bc = bc - alpha .* m_bc_hat ./ (sqrt(r_bc_hat) + 1e-8);
         bo = bo - alpha .* m_bo_hat ./ (sqrt(r_bo_hat) + 1e-8);
         by = by - alpha .* m_by_hat ./ (sqrt(r_by_hat) + 1e-8);
-
+       
     end
+    val_acc = 0;
+    val_loss = 0;
+    [val_loss, val_acc] = ...
+    sample(X_valid,Y_valid,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,val_acc,val_loss);
     
 end

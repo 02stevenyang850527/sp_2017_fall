@@ -5,11 +5,20 @@ yfile = matfile('y.mat');
 x = xfile.x;
 y = yfile.y;
 index = randperm(length(y));
+% shffule training data
+x = x(index);
+y = y(index);
+
+% 5 percent of validation data
+x_train = x(index(1:end-185));
+y_train = y(index(1:end-185));
+x_valid = x(index(end-184:end));
+y_valid = y(index(end-184:end));
 
 H = 256;
 alpha = 1e-3;
 batch_size = 8;
-n_iter = 4000;
+n_iter = 3000;
 
 [~,D] = size(x{1});
 output_dim = 48;
@@ -21,18 +30,23 @@ Wc = randn(Z,H) ./ sqrt(Z/2);
 Wo = randn(Z,H) ./ sqrt(Z/2);
 Wy = randn(H,output_dim) ./ sqrt(output_dim/2);
 
-bf = zeros(1,H);
+bf = ones(1,H);
 bi = zeros(1,H);
 bc = zeros(1,H);
 bo = zeros(1,H);
 by = zeros(1,output_dim);
 
-x = x(index);
-y = y(index);
 
-[output_loss1,output_acc1] = solver(x,y,alpha,batch_size,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by);
 
-save('output_loss1.mat','output_loss1');
-save('output_acc1.mat','output_acc1');
+[train_loss,train_acc,valid_loss,valid_acc] ...
+= solver(x_train,y_train,x_valid,y_valid,alpha,batch_size,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by);
+
+disp(valid_acc);
+disp(valid_loss);
+
+save('train_loss.mat','train_loss');
+save('train_acc.mat','train_acc');
+save('valid_loss.mat','valid_loss');
+save('valid_acc.mat','valid_acc');
 exit
 

@@ -16,9 +16,9 @@ function [X, hf, hi, ho, hc, Wf, Wi, Wo, Wc, c_old, c, Wy, y, h] ...
     hc = tanh_forward(hc);
     
     c = hf .* c_old + hi .* hc;
-    c = tanh_forward(c);
+    %c = tanh_forward(c);
     
-    h = ho .* c;
+    h = ho .* tanh_forward(c);
     
     y = fc_forward(h, Wy, by);
     
