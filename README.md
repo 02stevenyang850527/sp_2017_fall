@@ -10,8 +10,8 @@ Implement LSTM solver on haradware, either FPGA or the chip
 2. Consider the architechure design of the solver.  
 [Done] How to implement tanh and sigomid function on hardware?  
 A: Using piecewise method  
-<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/sigmoid.png alt="sigmoid" width=300 height=300>
-<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/sigmoid_sim.png alt="sigmoid_sim" width=300 height=250>
+<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/sigmoid.png alt="sigmoid" width=300 height=250><img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/sigmoid_sim.png alt="sigmoid_sim" width=300 height=250>  
+<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/tanh.png alt=tanh width=300 height=250>
 [Done] Since Xavier initialization is important, how do we do random initialization?  
 A: 18 bits linear feedback shift register  
 How many multipliers should we use on the architechure?   
