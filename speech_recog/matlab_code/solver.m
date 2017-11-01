@@ -7,7 +7,7 @@ function [output_loss,output_acc,val_loss,val_acc] = solver(X_train,Y_train,X_va
     output_dim = 48;
     
     cnt = 0;  % count for batch_size 
-    m = size(X_train,2);
+    m = size(X_train,3);
     smooth_loss = -log(1 / D);
     output_loss = zeros(1,floor(n_iter/print_after));
     output_acc = zeros(1,floor(n_iter/print_after));
@@ -46,11 +46,11 @@ function [output_loss,output_acc,val_loss,val_acc] = solver(X_train,Y_train,X_va
         end
         
         if cnt == num_batch-1
-            X_mini = X_train(cnt*batch_size+1:end);
-            Y_mini = Y_train(cnt*batch_size+1:end);
+            X_mini = X_train(:,:,cnt*batch_size+1:end);
+            Y_mini = Y_train(cnt*batch_size+1:end,:);
         else
-            X_mini = X_train(cnt*batch_size+1:(cnt+1)*batch_size);
-            Y_mini = Y_train(cnt*batch_size+1:(cnt+1)*batch_size);
+            X_mini = X_train(:,:,cnt*batch_size+1:(cnt+1)*batch_size);
+            Y_mini = Y_train(cnt*batch_size+1:(cnt+1)*batch_size,:);
         end
         
         cnt = cnt + 1;
@@ -68,9 +68,11 @@ function [output_loss,output_acc,val_loss,val_acc] = solver(X_train,Y_train,X_va
         c_loss = 0;
         total = 0;
         c_acc = 0;
-        for batch_cnt = 1:size(X_mini,2)
-            X = X_mini{batch_cnt};
-            Y = Y_mini{batch_cnt};
+        for batch_cnt = 1:size(X_mini,3)
+            X = X_mini(:,:,batch_cnt);
+            Y = Y_mini(batch_cnt,:);
+            X = X(1:Y(end),:);
+            Y = Y(1:Y(end));
             state_h = zeros(1,H);
             state_c = zeros(1,H);
             total = total + size(X,1);
@@ -113,8 +115,8 @@ function [output_loss,output_acc,val_loss,val_acc] = solver(X_train,Y_train,X_va
             output_acc(iter/print_after) = c_acc;
 
             disp('======================================');
-            disp(strcat('Iter: ',num2str(iter)));
-            disp(strcat('train_loss: ',num2str(c_loss),', train_acc: ',num2str(c_acc)));
+            fprintf('Iter: %d\n',int16(iter));
+            fprintf('train_loss: %f, train_acc: %f\n',c_loss, c_acc);
             disp('======================================');
             disp(' ');
         end
