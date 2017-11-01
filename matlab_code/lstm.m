@@ -44,5 +44,5 @@ alpha = 1e-3;
 time_step = 10;
 n_iter = 400000;
 
-solver(X,Y,alpha,time_step,n_iter,word,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by);
+solver_mex(X,Y,alpha,time_step,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by);
 

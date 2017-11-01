@@ -1,4 +1,4 @@
-function solver(X_train,Y_train,alpha,batch_size,n_iter,word,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by)
+function solver(X_train,Y_train,alpha,batch_size,n_iter,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by)
     beta1 = 0.9;
     beta2 = 0.999;
     print_after = 1000;
@@ -51,10 +51,9 @@ function solver(X_train,Y_train,alpha,batch_size,n_iter,word,Wf,Wi,Wc,Wo,Wy,bf,b
         
         if mod(iter, print_after) == 0
             disp("=======================================");
-            disp("Iter: "+string(iter)+", loss: " + string(smooth_loss));
+            fprintf("Iter: %d, loss: %f\n" ,int64(iter),smooth_loss);
             disp("=======================================");
             %sample(X_mini(1,:),100,word,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c);
-            disp("=======================================");
             disp(' ');
         end
         
