@@ -9,27 +9,27 @@ function solver(X_train,Y_train,alpha,batch_size,n_iter,word,Wf,Wi,Wc,Wo,Wy,bf,b
     [m,n] = size(X_train);
     smooth_loss = -log(1 / n);
     num_batch = ceil(m/batch_size);
-    M_Wf = zeros(size(135,64));
-    M_Wi = zeros(size(135,64));
-    M_Wc = zeros(size(135,64));
-    M_Wo = zeros(size(135,64));
-    M_Wy = zeros(size(64,71));
-    M_bf = zeros(size(1,64));
-    M_bi = zeros(size(1,64));
-    M_bc = zeros(size(1,64));
-    M_bo = zeros(size(1,64));
-    M_by = zeros(size(1,71));
+    M_Wf = zeros(135,64);
+    M_Wi = zeros(135,64);
+    M_Wc = zeros(135,64);
+    M_Wo = zeros(135,64);
+    M_Wy = zeros(64,71);
+    M_bf = zeros(1,64);
+    M_bi = zeros(1,64);
+    M_bc = zeros(1,64);
+    M_bo = zeros(1,64);
+    M_by = zeros(1,71);
         
-    R_Wf = zeros(size(135,64));
-    R_Wi = zeros(size(135,64));
-    R_Wc = zeros(size(135,64));
-    R_Wo = zeros(size(135,64));
-    R_Wy = zeros(size(64,71));
-    R_bf = zeros(size(1,64));
-    R_bi = zeros(size(1,64));
-    R_bc = zeros(size(1,64));
-    R_bo = zeros(size(1,64));
-    R_by = zeros(size(1,71));
+    R_Wf = zeros(135,64);
+    R_Wi = zeros(135,64);
+    R_Wc = zeros(135,64);
+    R_Wo = zeros(135,64);
+    R_Wy = zeros(64,71);
+    R_bf = zeros(1,64);
+    R_bi = zeros(1,64);
+    R_bc = zeros(1,64);
+    R_bo = zeros(1,64);
+    R_by = zeros(1,71);
     
     for iter = 1:n_iter
         t = iter;
@@ -53,7 +53,7 @@ function solver(X_train,Y_train,alpha,batch_size,n_iter,word,Wf,Wi,Wc,Wo,Wy,bf,b
             disp("=======================================");
             disp("Iter: "+string(iter)+", loss: " + string(smooth_loss));
             disp("=======================================");
-            sample(X_mini(1,:),100,word,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c);
+            %sample(X_mini(1,:),100,word,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,state_h,state_c);
             disp("=======================================");
             disp(' ');
         end
