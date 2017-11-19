@@ -24,6 +24,7 @@ Round x and then use 2 to replace exp, since 2^x is a shift operation on hardwar
 1. Comparison with my code and tensorflow  
 <img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/compare.png alt="compare" width=360 height=300>  
 [Note]:  
+
 1. Using BasicLSTMCell and dynamic_rnn in tensorflow . 
 2. My LSTM has an additional gradient clipping feature . 
 
