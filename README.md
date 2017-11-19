@@ -1,9 +1,9 @@
 # sp_2017_fall
 ## Target:
-Implement LSTM solver on haradware, either FPGA or the chip
+Inspired by <https://arxiv.org/abs/1612.00694>,  plan to design a hardware LSTM engine.
 ## Description:
-1. Build a LSTM-based sentence generator (small model) to implement the algorithm
-2. Build a bigger LSTM model for frame-based phone sequence recognition (TIMIT corpus)
+1. Implement a LSTM-based sentence generator (small model) to verify the algorithm
+2. Customized a LSTM solver for framewise phone sequence recognition (TIMIT corpus) on software
 ## Progress:
 [Note]: Simulation results below based on LSTM-based sentence generator
 1. Complete the matlab code, and understand the algorithm of LSTM including both training and inference.  
@@ -24,9 +24,9 @@ How many multipliers should we use on the architechure?
 ## Implementation for speech recognition
 1. Comparison with my code and tensorflow  
 <img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/compare.png alt="compare" width=300 height=250>  
-[Note]:  
-1. Using BasicLSTMCell and dynamic_rnn in tensorflow  
-2. My LSTM has an additional gradient clipping feature
+[Note]:
+1. Using BasicLSTMCell and dynamic_rnn in tensorflow . 
+2. My LSTM has an additional gradient clipping feature . 
 
 ## Reference
 Thanks to:  
