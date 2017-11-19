@@ -18,18 +18,20 @@ Since Xavier initialization is important, how do we do random initialization?
 How to calculate exponential which is part of the differential croos entropy?  
 Round x and then use 2 to replace exp, since 2^x is a shift operation on hardware  
 <img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/exp.png alt="exp" width=300 height=250><img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/exp_sim.png alt="exp_sim" width=300 height=250>  
-How many word length should be assigned to each parameter?  
-How many multipliers should we use on the architechure?  
+
   
 ## Implementation for speech recognition
 1. Comparison with my code and tensorflow  
-<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/compare.png alt="compare" width=300 height=250>  
-[Note]:
+<img src=https://github.com/02stevenyang850527/sp_2017_fall/blob/master/pic/compare.png alt="compare" width=360 height=300>  
+[Note]:  
 1. Using BasicLSTMCell and dynamic_rnn in tensorflow . 
 2. My LSTM has an additional gradient clipping feature . 
+
+## Develop efficient hardware architecture
 
 ## Reference
 Thanks to:  
 1.  <https://wiseodd.github.io/techblog/2016/08/12/lstm-backprop/>  
 2.  <https://github.com/wiseodd/hipsternet>  
-3.  <https://github.com/tensorflow/tensorflow/blob/r1.3/tensorflow/python/ops/rnn_cell_impl.py#L326>
+3.  <https://github.com/tensorflow/tensorflow/blob/r1.3/tensorflow/python/ops/rnn_cell_impl.py#L326>  
+4.  <https://arxiv.org/abs/1612.00694>
