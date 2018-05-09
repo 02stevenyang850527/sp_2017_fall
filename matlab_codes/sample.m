@@ -1,12 +1,14 @@
 function [loss, acc] = sample(X_valid,Y_valid,Wf,Wi,Wc,Wo,Wy,bf,bi,bc,bo,by,acc,loss)
-    num_valid = size(X_valid,2);
+    num_valid = size(X_valid,3);
     H = 256;
     total = 0;
     for n = 1:num_valid
-        X = X_valid{n};
-        Y = Y_valid{n};
+        X = X_valid(:,:,n);
+        Y = Y_valid(n,:);
         state_h = zeros(1,H);
         state_c = zeros(1,H);
+        Y = Y(1:Y(end));
+        X = X(1:Y(end),:);
         sentence_length = size(X,1);
         total = total + sentence_length;
         for k = 1:sentence_length
