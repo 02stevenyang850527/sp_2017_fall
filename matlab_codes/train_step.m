@@ -9,7 +9,7 @@ function [c_dWf,c_dWhf,c_dWi,c_dWhi,c_dWc,c_dWhc,c_dWo,c_dWho,c_dWy,c_dbf,c_dbi,
     loss = 0;
     output_dim = 61;
     % Forward part
-    [sentence_size,~] = size(X_train); % X_train is in one-hot format
+    [sentence_size,~] = size(X_train); 
     y_pred = zeros(1, output_dim, sentence_size);
     cache_X = zeros(1, D, sentence_size);
     cache_h_old = zeros(1, H, sentence_size);
